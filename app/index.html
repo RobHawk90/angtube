@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Angtube</title>
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="">
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
+
+  <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Roboto:400,500,700,400italic'>
+  <link rel="stylesheet" href="../node_modules/angular-material/angular-material.css" />
+  <link rel="stylesheet" href="./assets/css/app.css" />
+
+  <style type="text/css">
+    [ng\:cloak],
+    [ng-cloak],
+    [data-ng-cloak],
+    [x-ng-cloak],
+    .ng-cloak,
+    .x-ng-cloak {
+      display: none !important;
+    }
+  </style>
+</head>
+
+<body ng-app="angtube" layout="column" ng-controller="VideoController" ng-cloak>
+  <md-toolbar layout="row" layout-align="right center" class="md-hue-3">
+    <div>
+      <md-button class="menu" hide-gt-sm ng-click="toggleList()" aria-label="Show User List">
+        <md-icon md-svg-icon="menu"></md-icon>
+      </md-button>
+    </div>
+    <form ng-class="searchFormPosition" layout="row" layout-align="center" ng-submit="search(query)" flex>
+      <md-input-container>
+        <label>Pesquisar</label>
+        <input ng-model="query">
+      </md-input-container>
+      <div>
+        <md-button type="submit" class="md-raised">buscar</md-button>
+      </div>
+    </form>
+  </md-toolbar>
+
+  <div flex layout="row">
+    <md-sidenav ng-click="toggleList()" md-is-locked-open="shouldOpenList()" md-component-id="left" class="md-whiteframe-z2">
+      <md-list>
+        <md-list-item ng-repeat="video in videos" ng-click="select(video)" class="md-3-line md-long-text">
+          <div ng-class="{'selected' : video === selected }" layout="column" layout-padding layout-align="center center">
+            <img ng-src="{{loadThumbnail(video, 'medium')}}">
+            <div class="md-list-item-text">
+              <h3>{{video.snippet.title}}</h3>
+              <p>{{video.snippet.description}}</p>
+            </div>
+          </div>
+        </md-list-item>
+      </md-list>
+      <md-button ng-click="loadMore(query, nextPageToken)" ng-show="videos.length">mostrar mais</md-button>
+    </md-sidenav>
+
+    <md-content flex id="content" ng-show="selected">
+      <div class="embed-responsive embed-responsive-16by9">
+        <youtube-video video-id="embedId" class="embed-responsive-item"></youtube-video>
+      </div>
+      <div layout="row">
+        <h2 flex>{{selected.snippet.title}}</h2>
+        <h3 flex layout="row" layout-align="end center">{{selected.statistics.viewCount}} visualizações</h3>
+      </div>
+      <p flex ng-bind-html="selected.snippet.description"></p>
+    </md-content>
+  </div>
+
+  <script src="../node_modules/angular/angular.js"></script>
+  <script src="../node_modules/angular-animate/angular-animate.js"></script>
+  <script src="../node_modules/angular-aria/angular-aria.js"></script>
+  <script src="../node_modules/angular-sanitize/angular-sanitize.js"></script>
+
+  <script type="text/javascript" src="../node_modules/angular-material/angular-material.js"></script>
+
+  <script src="https://www.youtube.com/iframe_api"></script>
+  <script src="../node_modules/angular-youtube-embed/src/angular-youtube-embed.js"></script>
+
+  <script src="./src/services/youtube/YouTube.js"></script>
+  <script src="./src/services/youtube/YouTubeKey.js"></script>
+  <script src="./src/services/youtube/YouTubeAPI.js"></script>
+  <script src="./src/videos/Video.js"></script>
+  <script src="./src/videos/VideoController.js"></script>
+  <script src="./src/app.js"></script>
+
+</body>
+
+</html>
